@@ -450,3 +450,64 @@ function addMeridian(i,pattern)
 	}
 	return [i,flag];
 }
+
+
+function setcontextemenu(map)
+{
+	map.setContextMenu({
+		  control: 'marker',
+		  style: "",
+		  options: [{
+			    title: 'Live Track',
+			    name: 'live_track',
+			    action: function(e){
+			    	//console.log(e.marker.details["srno"]);
+			    	srno = e.marker.details["srno"];
+			    	name = e.marker.details["name"];
+			    	url = "/gps/track/" + srno + "/vehicle/";
+					newWindow(url, srno, name);
+			    } 
+		    }, 
+		    {
+			    title: 'Replay Route',
+			    name: 'replay_route',
+			    action: function(e) {
+			    	//console.log(e.marker.details["srno"]);
+			    	srno = e.marker.details["srno"];
+			    	name = e.marker.details["name"];
+			    	url = "/gps/replay/route/" + srno + "/";
+					newWindow(url, srno, name);
+			    }
+		    },
+		    {
+			    title: 'Set Alerts',
+			    name: 'speed_alert',
+			    action: function(e) {
+			    	$("#sel-speed-vehi, #sel-geo-vehi").val(e.marker.details["srno"]);
+			    	$("#sel-speed-vehi, #sel-geo-vehi").attr("disabled","disabled");
+			    	$("#alert-info").dialog("open");
+		    	}
+		    },]
+	});	
+}
+
+function addlegends(map)
+{
+	legend = "<div id='legend'>" +
+				"<img src='/static/images/Ig_ON_MOV.png'> Moving </br>" +
+				" <img src='/static/images/Ig_ON_IDL.png'> Idle </br>" +
+				" <img src='/static/images/Ig_OFF.png'> Parked </br>" +
+				" <img src='/static/images/Ig_NO_DATA.png'> Old Data </br>"
+			"</div>"
+	map.addControl({
+		  position: 'right_top',
+//		  content: 'Geolocate',
+		  content : legend,
+		  style: {
+		    margin: '5px',
+//		    padding: '1px 6px',
+		    border: 'solid 1px #717B87',
+		    background: '#fff'
+		  }
+	})
+}
